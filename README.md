@@ -48,23 +48,48 @@ pip install numpy==1.26.4 streamlit pandas matplotlib opencv-python ffmpeg-pytho
 
 ## 使用方法
 
-1. **准备数据**
-   - 确保在工作目录中有B-SOID生成的数据文件（如`prefix_data.sav`和`prefix_predictions.sav`）
-   - 数据文件格式应为 `[鱼1数据, 鱼2数据, ...]`，支持任意数量的鱼
-   - 确保视频文件存在
-2. **运行应用**
-   ```bash
-   cd multi_fish_video
-   streamlit run multi_fish_app.py
-   ```
-3. **配置参数**
-   - 输入工作目录路径
-   - 选择数据前缀
-   - 输入视频路径和文件名
-4. **开始分析**
-   - 点击"开始分析"按钮
-   - 等待分析完成
-   - 查看生成的视频结果
+### 1. 获取代码
+
+**方式一：Git克隆（推荐，可随时更新）**
+```bash
+git clone https://github.com/uiiiii504/multi_fish_video.git
+cd multi_fish_video
+```
+
+**方式二：下载ZIP**
+1. 访问 `https://github.com/uiiiii504/multi_fish_video`
+2. 点击绿色 **Code** 按钮
+3. 选择 **Download ZIP**
+4. 解压到任意目录
+5. 进入解压后的 `multi_fish_video` 文件夹
+
+### 2. 安装依赖
+```bash
+pip install numpy==1.26.4 streamlit pandas matplotlib opencv-python ffmpeg-python joblib tqdm
+```
+
+### 3. 运行应用
+```bash
+cd multi_fish_video
+streamlit run multi_fish_app.py
+```
+
+### 4. 配置参数
+- 输入工作目录路径
+- 选择数据前缀
+- 输入视频路径和文件名
+
+### 5. 开始分析
+- 点击"开始分析"按钮
+- 等待分析完成
+- 查看生成的视频结果
+
+### 更新代码（仅限Git克隆方式）
+如果之前使用Git克隆，可以通过以下命令更新到最新版本：
+```bash
+cd multi_fish_video
+git pull origin main
+```
 
 ## B-SOID数据生成SOP
 
