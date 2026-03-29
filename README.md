@@ -15,7 +15,7 @@
 ## 目录结构
 
 ```
-multi_fish/
+multi_fish_video/
 ├── multi_fish_app.py        # 主应用文件
 ├── utils/
 │   ├── data_processing.py   # 数据处理模块
@@ -52,7 +52,7 @@ pip install streamlit numpy pandas matplotlib opencv-python ffmpeg-python joblib
    - 确保视频文件存在
 2. **运行应用**
    ```bash
-   cd multi_fish
+   cd multi_fish_video
    streamlit run multi_fish_app.py
    ```
 3. **配置参数**
