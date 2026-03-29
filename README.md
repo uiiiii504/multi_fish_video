@@ -41,8 +41,10 @@ multi_fish_video/
 ## 安装依赖
 
 ```bash
-pip install streamlit numpy pandas matplotlib opencv-python ffmpeg-python joblib tqdm
+pip install numpy==1.26.4 streamlit pandas matplotlib opencv-python ffmpeg-python joblib tqdm
 ```
+
+**注意**：指定numpy版本以避免与其他包的兼容性问题。
 
 ## 使用方法
 
