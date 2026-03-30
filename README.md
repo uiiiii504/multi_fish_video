@@ -1,167 +1,130 @@
 # 多鱼行为分析工具
 
-## 项目简介
-
-这个工具是基于B-SOID的多鱼行为分析扩展，用于分析和可视化多条鱼的行为。
+一个基于Streamlit和OpenCV的多鱼行为分析应用，支持视频标注、骨架绘制和行为预测。
 
 ## 功能特点
 
-- 支持动态数量的鱼（根据输入数据自动调整）
-- 生成包含多条鱼行为标注的同步视频
-- 当鱼的数量超过8时会给出性能警告
-- 提供丰富的颜色区分不同的鱼
-- 直接在原始视频帧上绘制鱼的位置和行为标签
+- 🎬 **多鱼视频分析**：支持同时分析多条鱼的行为
+- 📊 **自动组信息识别**：自动从数据中提取组信息
+- 🎯 **灵活的鱼选择**：支持为每个组选择任意鱼编号
+- 🎨 **可视化标注**：在视频中绘制骨架、边界框和行为标签
+- 📁 **自定义导出**：支持自定义视频导出路径
 
-## 目录结构
+## 项目结构
 
 ```
-multi_fish_video/
-├── multi_fish_app.py        # 主应用文件
+multi_fish/
+├── multi_fish_app.py          # 主应用文件
 ├── utils/
-│   ├── data_processing.py   # 数据处理模块
-│   ├── video_analysis.py    # 视频分析模块
-│   └── visualization.py     # 可视化模块
-├── config/
-│   └── config.py            # 配置文件
-└── README.md                # 说明文件
+│   ├── data_processing.py     # 数据处理模块
+│   ├── video_analysis.py      # 视频分析模块
+│   └── visualization.py       # 可视化模块
+└── README.md                  # 项目说明
 ```
 
-## 环境要求
+## 安装要求
 
 - Python 3.7+
 - Streamlit
 - NumPy
 - Pandas
-- Matplotlib
 - OpenCV
-- ffmpeg
-- joblib
-- tqdm
+- Joblib
+- TQDM
 
-## 安装依赖
+## 安装步骤
 
-```bash
-pip install numpy==1.26.4 streamlit pandas matplotlib opencv-python ffmpeg-python joblib tqdm
-```
+1. **克隆项目**
+   ```bash
+   git clone <repository-url>
+   cd multi_fish
+   ```
 
-**注意**：指定numpy版本以避免与其他包的兼容性问题。
+2. **安装依赖**
+   ```bash
+   pip install streamlit numpy pandas opencv-python joblib tqdm
+   ```
 
 ## 使用方法
 
-### 1. 获取代码
+1. **启动应用**
+   ```bash
+   streamlit run multi_fish_app.py
+   ```
 
-**方式一：Git克隆（推荐，可随时更新）**
-```bash
-git clone https://github.com/uiiiii504/multi_fish_video.git
-cd multi_fish_video
-```
+2. **操作步骤**
+   - 点击左侧 "MultiFishVideo" 进入视频分析工具
+   - 输入工作目录（包含.sav文件的路径）
+   - 选择数据前缀
+   - 输入视频路径和视频文件名
+   - 在高级配置中选择要分析的鱼（支持多选）
+   - 点击"开始分析"生成视频
 
-**方式二：下载ZIP**
-1. 访问 `https://github.com/uiiiii504/multi_fish_video`
-2. 点击绿色 **Code** 按钮
-3. 选择 **Download ZIP**
-4. 解压到任意目录
-5. 进入解压后的 `multi_fish_video` 文件夹
-
-### 2. 安装依赖
-```bash
-pip install numpy==1.26.4 streamlit pandas matplotlib opencv-python ffmpeg-python joblib tqdm
-```
-
-### 3. 运行应用
-```bash
-cd multi_fish_video
-streamlit run multi_fish_app.py
-```
-
-### 4. 配置参数
-- 输入工作目录路径
-- 选择数据前缀
-- 输入视频路径和文件名
-
-### 5. 开始分析
-- 点击"开始分析"按钮
-- 等待分析完成
-- 查看生成的视频结果
-
-### 更新代码（仅限Git克隆方式）
-如果之前使用Git克隆，可以通过以下命令更新到最新版本：
-```bash
-cd multi_fish_video
-git pull origin main
-```
-
-## B-SOID数据生成SOP
-
-### 文件说明
-
-对于每一个4缸视频（比如AA1-AA4），需要以下两类.sav文件：
-
-| 文件类型 | B-SOID生成的文件名示例               | 作用                         |
-| ---- | ---------------------------- | -------------------------- |
-| 轨迹数据 | Mar-28-2026\_data.sav        | 提供4条鱼的物理坐标(x, y)           |
-| 预测标签 | Mar-28-2026\_predictions.sav | 提供每一帧对应的行为ID（如0代表静止，1代表游动） |
-
-### 使用B-SOID生成数据文件的步骤
-
-#### 第一步：数据加载 (Loading)
-
-1. 打开B-SOID应用
-2. 进入 **Preprocessing** 界面
-3. 同时选中对应同一个视频的4个CSV文件（比如AA1.csv到AA4.csv）
-4. 注意：如果想一次性处理所有76个文件，也可以全部选中
-5. B-SOID会把这些文件作为一个整体进行处理
-
-#### 第二步：特征提取与聚类 (Feature & Clustering)
-
-1. 运行 **Extract Features**
-2. 运行 **Run UMAP**
-3. 运行 **Run HDBSCAN**
-4. 这一步会决定鱼有多少种动作（Group 0, 1, 2...）
-
-#### 第三步：模型训练 (Training)
-
-1. 运行 **Train Random Forest**
-2. 这一步是让AI学习如何通过特征识别动作
-
-#### 第四步：导出关键文件 (Exporting) —— 最关键的一步
-
-1. 在B-SOID界面找到 **Export** 或 **Save Analysis** 按钮
-2. 点击导出分析结果
-3. 生成的文件夹里会出现：
-   - `_data.sav`：包含了刚才导入的所有鱼的坐标
-   - `_predictions.sav`：包含了AI对这些鱼的分类预测结果
-
-### 注意事项
-
-- 不能直接从CSV文件"变"出这些文件，必须走完B-SOID的完整分析流程
-- 确保CSV文件的格式与B-SOID要求一致
-- 数据文件名的前缀（如Mar-28-2026）将用于后续的多鱼分析
-
-## 数据格式要求
+## 数据格式
 
 ### 输入数据
-
-- **数据文件** (`prefix_data.sav`): 包含多条鱼的坐标数据，格式为 `[鱼1数据, 鱼2数据, ...]`
-- **预测文件** (`prefix_predictions.sav`): 包含多条鱼的行为预测结果，格式为 `[鱼1预测, 鱼2预测, ...]`
+- **.sav文件**：B-SOiD处理后的数据文件，包含鱼的坐标和行为预测
+- **视频文件**：支持mp4, avi, mov, wmv格式
 
 ### 输出结果
+- **标注视频**：包含骨架、边界框和行为标签的视频
+- **文件命名**：`视频名称_组别.mp4`
 
-- **视频文件**: 在视频目录生成包含多条鱼行为标注的视频
+## 高级功能
+
+### 鱼选择
+- **多选模式**：支持为每个组选择任意编号的鱼
+- **范围选择**：可以选择连续或不连续的鱼编号
+- **实时显示**：选择后实时显示已选择的鱼的详细信息
+
+### 视频标注
+- **骨架绘制**：绘制鱼的关键点和骨架
+- **边界框**：显示鱼的边界框和组信息
+- **行为标签**：显示B-SOiD行为预测结果
+- **顶部标签**：只显示前4组的标签，避免标签过长
 
 ## 注意事项
 
-1. 确保视频文件与数据文件的帧速率匹配
-2. 如遇内存不足问题，考虑增加虚拟内存或使用更小的数据集
-3. 鱼的数量超过8条时，可能会导致渲染缓慢
+- 骨架数据来自.sav文件（B-SOiD处理后的数据）
+- 视频只是背景，骨架是独立绘制的
+- 系统会自动识别数据中的组信息和标点数
+- 选择过多鱼可能导致渲染缓慢
 
-## 故障排除
+## 技术说明
 
-- **视频文件不存在**: 检查视频路径和文件名是否正确
-- **数据文件不存在**: 确保工作目录中有正确的数据文件
-- **内存不足**: 增加虚拟内存或使用更小的数据集
-- **FFmpeg错误**: 确保FFmpeg已正确安装并添加到系统路径
+- **数据处理**：自动从.sav文件中提取鱼的坐标和行为预测
+- **视频分析**：使用OpenCV处理视频帧并绘制标注
+- **用户界面**：使用Streamlit构建交互式Web界面
+- **性能优化**：支持降采样渲染，提高处理速度
 
-## 联系方式
+## 示例
 
-如有问题，请联系开发者。
+### 基本使用
+1. 输入工作目录：`D:\data\fish_behavior`
+2. 选择前缀：`Mar-28-2026`
+3. 输入视频：`video.mp4`
+4. 选择鱼：control组选择1,3,5；negative组选择2,4；Trp组选择3-10；Tyr组选择7-18
+5. 点击"开始分析"生成视频
+
+### 输出示例
+- 视频文件：`video_control_negative_Trp_Tyr.mp4`
+- 视频中包含：骨架绘制、边界框、行为标签
+
+## 常见问题
+
+**Q: 视频生成失败怎么办？**
+A: 检查工作目录和视频路径是否正确，确保.sav文件存在且格式正确。
+
+**Q: 选择多少条鱼合适？**
+A: 建议不超过8条鱼，以保证渲染速度。
+
+**Q: 如何自定义导出路径？**
+A: 在"自定义导出路径"输入框中填写目标路径即可。
+
+## 贡献
+
+欢迎提交Issue和Pull Request来改进这个项目！
+
+## 许可证
+
+MIT License
